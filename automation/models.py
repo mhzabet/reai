@@ -90,13 +90,20 @@ class LiveAssets(models.Model):
     def __str__(self):
         return f"Live Asset {self.program.name}: {self.asset.asset_value} - {self.is_live} "
 
-class EndpointsByAI(models.Model):
-    pass
+class JSbyAI(models.Model): # Where JS Intersets (credentials, secrets, paths,... ) by AI are stored
+    program = models.ForeignKey(Programs, on_delete=models.CASCADE, related_name='JS_AI')
+    asset = models.ForeignKey(LiveAssets, on_delete=models.CASCADE, related_name="asset_js")
 
-class CredentialsByAI(models.Model):
-    pass
+    raw_intersets = models.JSONField()
+    score = models.IntegerField(null=True, blank=True, default=0)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"JS Interstes by AI {self.program.name}: {self.asset.asset_value} - {self.score} "
 
-class XSSDiscover(models.Model):
-    pass
-class SSRFDiscover(models.Model):
-    pass
+
+# class XSSDiscover(models.Model):
+#     pass
+# class SSRFDiscover(models.Model):
+#     pass

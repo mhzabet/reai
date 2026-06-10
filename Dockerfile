@@ -13,6 +13,24 @@ ENV PYTHONDONTWRITEBYTECODE=1
 #Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED=1 
 
+# basic tools only (safe minimal)
+RUN apt-get update && apt-get install -y \
+    unzip \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# install subfinder binary directly (NO GO, NO BUILD)
+RUN curl -sL https://github.com/projectdiscovery/subfinder/releases/download/v2.14.0/subfinder_2.14.0_linux_arm64.zip \
+    -o subfinder.zip \
+    && unzip -a subfinder.zip \
+    && mv subfinder /usr/local/bin/ \
+    && chmod +x /usr/local/bin/subfinder \
+    && rm subfinder.zip
+
+# verify (optional but useful)
+RUN subfinder -version
+
 # Upgrade pip
 RUN pip install --upgrade pip 
 
